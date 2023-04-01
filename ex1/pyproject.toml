@@ -8,6 +8,7 @@ packages = [{include = "ex1", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.6.8"
+pygame = "^2.3.0"
 
 
 [build-system]
