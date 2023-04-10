@@ -8,12 +8,12 @@
 		S3,
 		S4
 	}
-	type PersonState = {
+	type Person = {
 		kind: PersonKind;
 		willGossip: boolean;
 		cooldown: number;
 	};
-	type Cell = PersonState | undefined;
+	type Cell = Person | undefined;
 	const initializeState = (p: number) => {
 		const initializePopulation = (n: number, p: number) => {
 			const shouldPopulate = () => Math.random() < 1 - p;
@@ -29,7 +29,7 @@
 		const chooseInitialGossiper = (state: Cell[]) => {
 			const population = state.reduce(
 				(acc, val) => (val === undefined ? acc : [...acc, val]),
-				[] as PersonState[]
+				[] as Person[]
 			);
 			return randomChoice(population);
 		};
@@ -56,30 +56,30 @@
 		].filter(validCoords);
 		return coords.map(coordsToIndex);
 	};
-	const isPerson = (c: Cell): c is PersonState => {
+	const isPerson = (c: Cell): c is Person => {
 		return c !== undefined;
 	};
-	const gossipProbability = (p: PersonState, believeMore: boolean) => {
+	const gossipProbability = (p: Person, moreSuggestible: boolean) => {
 		const probabilities = {
 			[PersonKind.S1]: 1,
 			[PersonKind.S2]: 2 / 3,
 			[PersonKind.S3]: 1 / 3,
 			[PersonKind.S4]: 0
 		};
-		const temporaryKinds = {
+		const suggestibleKinds = {
 			[PersonKind.S1]: PersonKind.S1,
 			[PersonKind.S2]: PersonKind.S1,
 			[PersonKind.S3]: PersonKind.S2,
 			[PersonKind.S4]: PersonKind.S3
 		};
-		const temporaryKind = believeMore ? temporaryKinds[p.kind] : p.kind;
+		const temporaryKind = moreSuggestible ? suggestibleKinds[p.kind] : p.kind;
 		return probabilities[temporaryKind];
 	};
 	const isPopulated = (state: Cell[], i: number) => {
 		return isPerson(state[i]);
 	};
-	const shouldGossip = (p: PersonState, believeMore: boolean) => {
-		return Math.random() <= gossipProbability(p, believeMore);
+	const shouldGossip = (p: Person, heardCount: number) => {
+		return Math.random() <= gossipProbability(p, heardCount >= 2);
 	};
 	const getNextState = (state: Cell[], l: number) => {
 		const isGossiper = (c: Cell, i: number) => {
@@ -91,17 +91,17 @@
 			console.log(`${i}: passing to ${existingNeighbors}`);
 			return existingNeighbors;
 		};
-		const decideIfToGossip = (p: PersonState, i: number, heardCount: number) => {
+		const decideIfToGossip = (p: Person, i: number, heardCount: number) => {
 			if (heardCount === 0) {
 				return false;
 			}
-			const decision = p.cooldown === 0 && shouldGossip(p, heardCount > 1);
-			if (decision) {
+			const wantsToGossip = p.cooldown === 0 && shouldGossip(p, heardCount);
+			if (wantsToGossip) {
 				console.log(`${i}: decides to gossip`);
 			} else {
 				console.log(`${i}: decides not to gossip (cooldown: ${p.cooldown})`);
 			}
-			return decision;
+			return wantsToGossip;
 		};
 		const gossipers = state.flatMap(isGossiper);
 		const gossipTargets = gossipers.flatMap(getGossipTargets);
