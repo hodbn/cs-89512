@@ -158,11 +158,14 @@
 	const singleStepGame = () => {
 		state = getNextState(state, l);
 		generation++;
-		if (activeGossipers === 0) {
-			setRunning(false);
-			gameState = GameState.END;
-			writeLog('game ended');
-		}
+		setTimeout(() => {
+			writeLog(`active gossipers: ${activeGossipers}`);
+			if (activeGossipers === 0) {
+				setRunning(false);
+				gameState = GameState.END;
+				writeLog('game ended');
+			}
+		});
 	};
 	const resetGame = () => {
 		gameNumber++;
