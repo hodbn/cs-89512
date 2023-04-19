@@ -143,7 +143,7 @@
 		}
 		log += `game=${gameNumber} gen=${generation} | ${msg}`;
 		setTimeout(() => {
-			logElement.scroll({ top: logElement.scrollHeight, behavior: 'smooth' });
+			logElement.scroll({ top: logElement.scrollHeight, behavior: 'instant' });
 		});
 	};
 	const singleStepGame = () => {
