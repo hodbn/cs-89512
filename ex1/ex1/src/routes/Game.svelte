@@ -162,7 +162,7 @@
 		state = initializeState(p);
 		writeLog('game restarted');
 	};
-        let isRunning: boolean
+	let isRunning: boolean;
 	$: isRunning = playHandle !== -1;
 	const toggleRunning = () => {
 		setRunning(!isRunning);
