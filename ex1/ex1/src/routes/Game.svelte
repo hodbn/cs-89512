@@ -200,6 +200,9 @@
 	const handleClickRunPause = () => {
 		toggleRunning();
 	};
+	const handleLogClear = () => {
+		log = '';
+	};
 </script>
 
 <div class="w-full flex justify-between">
@@ -271,7 +274,14 @@
 				<td />
 			</tr>
 		</table>
-		<h1>Message log</h1>
+		<div class="flex justify-between">
+			<h1 class="text-lg">Message log</h1>
+			<button
+				type="button"
+				class="rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+				on:click={handleLogClear}>Clear</button
+			>
+		</div>
 		<textarea
 			bind:this={logElement}
 			class="h-full min-w-[30rem] font-mono flex-grow block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
