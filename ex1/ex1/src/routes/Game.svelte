@@ -128,6 +128,7 @@
 
 	let p = 0.5;
 	let l = 3;
+	let maxGen = 100;
 	export let activeGossipers: number;
 	export let generation = 0;
 	export let gameNumber = 0;
@@ -160,7 +161,7 @@
 		generation++;
 		setTimeout(() => {
 			writeLog(`active gossipers: ${activeGossipers}`);
-			if (activeGossipers === 0) {
+			if (activeGossipers === 0 || generation === maxGen) {
 				setRunning(false);
 				gameState = GameState.END;
 				writeLog('game ended');
@@ -228,30 +229,44 @@
 			<tr>
 				<th class="text-start">Game params</th>
 				<td class="text-end">
-					<div class="flex rounded-md shadow-sm">
-						<span
-							class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 text-xs"
-							>P =</span
-						>
-						<input
-							type="text"
-							class="block w-6 flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
-							placeholder="Density"
-							bind:value={p}
-						/>
+					<div class="flex justify-between space-x-2">
+						<div class="flex rounded-md shadow-sm flex-grow">
+							<span
+								class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 text-xs"
+								>P =</span
+							>
+							<input
+								type="text"
+								class="block w-10 min-w-[2rem] flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
+								placeholder="Density"
+								bind:value={p}
+							/>
+						</div>
+						<div class="flex rounded-md shadow-sm flex-grow">
+							<span
+								class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 text-xs"
+								>L =</span
+							>
+							<input
+								type="text"
+								class="block w-10 min-w-[1rem] flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
+								placeholder="Cooldown"
+								bind:value={l}
+							/>
+						</div>
 					</div>
 				</td>
 				<td>
 					<div class="flex rounded-md shadow-sm">
 						<span
 							class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 text-xs"
-							>L =</span
+							>MaxGen =</span
 						>
 						<input
 							type="text"
-							class="block w-6 flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
+							class="block w-10 min-w-[3rem] flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
 							placeholder="Cooldown"
-							bind:value={l}
+							bind:value={maxGen}
 						/>
 					</div>
 				</td>
