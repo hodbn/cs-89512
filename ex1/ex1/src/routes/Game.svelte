@@ -335,7 +335,7 @@
 	<div
 		class="grid gap-0.5 grid-cols-[repeat(100,_minmax(0,_1fr))] grid-rows-[repeat(100,_minmax(0,_1fr))] bg-white border border-gray-500 shadow-xl text-xs"
 	>
-		{#each state as cell, i}
+		{#each state as cell, i (i)}
 			<div
 				class="w-1.5 h-1.5"
 				class:bg-white={cell === undefined}
