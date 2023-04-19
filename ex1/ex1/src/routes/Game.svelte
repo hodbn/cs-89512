@@ -173,6 +173,11 @@
 	let isRunning: boolean;
 	$: isRunning = playHandle !== -1;
 	const toggleRunning = () => {
+		if (isRunning === true) {
+			writeLog('game paused');
+		} else {
+			writeLog('game continued');
+		}
 		setRunning(!isRunning);
 	};
 	let runInterval = 500;
