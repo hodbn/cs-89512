@@ -16,7 +16,7 @@
 	type Cell = Person | undefined;
 	const initializeState = (p: number) => {
 		const initializePopulation = (n: number, p: number) => {
-			const shouldPopulate = () => Math.random() < 1 - p;
+			const shouldPopulate = () => Math.random() < p;
 			const getRandomPersonKind = () =>
 				randomChoice([PersonKind.S1, PersonKind.S2, PersonKind.S3, PersonKind.S4]);
 			const populate = () => ({
