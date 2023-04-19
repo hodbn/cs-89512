@@ -138,7 +138,10 @@
 	let log = '';
 	let logElement: HTMLTextAreaElement;
 	const writeLog = (msg: string) => {
-		log += `\ngame=${gameNumber} gen=${generation} | ${msg}`;
+		if (log !== '') {
+			log += '\n';
+		}
+		log += `game=${gameNumber} gen=${generation} | ${msg}`;
 		setTimeout(() => {
 			logElement.scroll({ top: logElement.scrollHeight, behavior: 'smooth' });
 		});
