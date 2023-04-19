@@ -263,7 +263,7 @@
 							>MaxGen =</span
 						>
 						<input
-							type="text"
+							type="number"
 							class="block w-10 min-w-[3rem] flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
 							placeholder="Cooldown"
 							bind:value={maxGen}
