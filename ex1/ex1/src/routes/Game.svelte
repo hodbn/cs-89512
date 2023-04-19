@@ -246,7 +246,7 @@
 </script>
 
 <div class="w-full flex justify-between">
-	<div class="flex flex-col">
+	<div class="flex flex-col space-y-2">
 		<h1 class="text-lg">Controls</h1>
 		<table class="border-spacing-2 border-separate">
 			<tr>
