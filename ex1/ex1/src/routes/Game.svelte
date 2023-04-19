@@ -126,8 +126,8 @@
 		return nextState;
 	};
 
-	const p = 0.5;
-	const l = 3;
+	let p = 0.5;
+	let l = 3;
 	export let activeGossipers: number;
 	export let generation = 0;
 	export let gameNumber = 0;
@@ -207,8 +207,39 @@
 
 <div class="w-full flex justify-between">
 	<div class="flex flex-col">
-		<h1>Controls</h1>
+		<h1 class="text-lg">Controls</h1>
 		<table class="border-spacing-2 border-separate">
+			<tr>
+				<th class="text-start">Game params</th>
+				<td class="text-end">
+					<div class="flex rounded-md shadow-sm">
+						<span
+							class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 text-xs"
+							>P =</span
+						>
+						<input
+							type="text"
+							class="block w-6 flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
+							placeholder="Density"
+							bind:value={p}
+						/>
+					</div>
+				</td>
+				<td>
+					<div class="flex rounded-md shadow-sm">
+						<span
+							class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 text-xs"
+							>L =</span
+						>
+						<input
+							type="text"
+							class="block w-6 flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
+							placeholder="Cooldown"
+							bind:value={l}
+						/>
+					</div>
+				</td>
+			</tr>
 			<tr>
 				<th class="text-start">Game state</th>
 				<td class="text-end">{gameState === GameState.ALIVE ? 'Alive' : 'Ended'}</td>
@@ -244,7 +275,7 @@
 					<div class="flex rounded-md shadow-sm">
 						<input
 							type="text"
-							class="block w-full min-w-0 flex-1 rounded-none rounded-l-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
+							class="block w-6 flex-1 rounded-none rounded-l-md text-end border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
 							placeholder="interval"
 							bind:value={runInterval}
 						/>
