@@ -130,6 +130,7 @@
 	let l = 3;
 	let maxGen = 100;
 	let history = [];
+	let lastResult = '';
 	export let activeGossipers: number;
 	export let generation = 0;
 	export let gameNumber = 0;
@@ -167,16 +168,20 @@
 			if (activeGossipers === 0 || generation === maxGen) {
 				setRunning(false);
 				gameState = GameState.END;
-				const result = {
-					l,
-					p,
-					activeGossipers,
-					generation,
-					maxGen,
-					history,
-				};
-                                history = []
-				writeLog(`game ended: ${JSON.stringify(result)}`);
+				lastResult = JSON.stringify(
+					{
+						l,
+						p,
+						activeGossipers,
+						generation,
+						maxGen,
+						history
+					},
+					null,
+					2
+				);
+				history = [];
+				writeLog('game ended');
 			}
 		});
 	};
@@ -231,6 +236,12 @@
 	};
 	const handleLogClear = () => {
 		log = '';
+	};
+	const handleLastResultClear = () => {
+		lastResult = '';
+	};
+	const handleLastResultCopy = () => {
+		navigator.clipboard.writeText(lastResult);
 	};
 </script>
 
@@ -360,6 +371,25 @@
 			bind:this={logElement}
 			class="h-full min-w-[30rem] font-mono flex-grow block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
 			>{log}</textarea
+		>
+		<div class="flex justify-between">
+			<h1 class="text-lg">Last game result</h1>
+			<div>
+				<button
+					type="button"
+					class="rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+					on:click={handleLastResultCopy}>Copy</button
+				>
+				<button
+					type="button"
+					class="rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+					on:click={handleLastResultClear}>Clear</button
+				>
+			</div>
+		</div>
+		<textarea
+			class="h-full min-w-[30rem] font-mono flex-grow block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-xs"
+			>{lastResult}</textarea
 		>
 	</div>
 	<div
