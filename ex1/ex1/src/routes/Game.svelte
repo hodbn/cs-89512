@@ -123,12 +123,13 @@
 				  }
 				: undefined
 		);
-		return nextState;
+		return { nextState, numGossipers: gossipers.length };
 	};
 
 	let p = 0.5;
 	let l = 3;
 	let maxGen = 100;
+	let history = [];
 	export let activeGossipers: number;
 	export let generation = 0;
 	export let gameNumber = 0;
@@ -157,14 +158,25 @@
 		});
 	};
 	const singleStepGame = () => {
-		state = getNextState(state, l);
+		const { nextState, numGossipers } = getNextState(state, l);
+		history.push({ generation, numGossipers });
+		state = nextState;
 		generation++;
 		setTimeout(() => {
 			writeLog(`active gossipers: ${activeGossipers}`);
 			if (activeGossipers === 0 || generation === maxGen) {
 				setRunning(false);
 				gameState = GameState.END;
-				writeLog('game ended');
+				const result = {
+					l,
+					p,
+					activeGossipers,
+					generation,
+					maxGen,
+					history,
+				};
+                                history = []
+				writeLog(`game ended: ${JSON.stringify(result)}`);
 			}
 		});
 	};
