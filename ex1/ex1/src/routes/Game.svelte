@@ -93,7 +93,7 @@
 		const getGossipTargets = (i: number) => {
 			const neighbors = getNeighbors(i);
 			const existingNeighbors = neighbors.filter((i) => isPopulated(state, i));
-			console.log(`${indexToCoordsStr(i)}: passing to ${existingNeighbors}`);
+			// writeLog(`${indexToCoordsStr(i)}: passing to ${existingNeighbors}`);
 			return existingNeighbors;
 		};
 		const decideIfToGossip = (p: Person, i: number, heardCount: number) => {
@@ -101,11 +101,11 @@
 				return false;
 			}
 			const wantsToGossip = p.cooldown === 0 && shouldGossip(p, heardCount);
-			if (wantsToGossip) {
-				writeLog(`${indexToCoordsStr(i)}: decides to gossip`);
-			} else {
-				writeLog(`${indexToCoordsStr(i)}: decides not to gossip (cooldown: ${p.cooldown})`);
-			}
+			// if (wantsToGossip) {
+			// 	writeLog(`${indexToCoordsStr(i)}: decides to gossip`);
+			// } else {
+			// 	writeLog(`${indexToCoordsStr(i)}: decides not to gossip (cooldown: ${p.cooldown})`);
+			// }
 			return wantsToGossip;
 		};
 		const gossipers = state.flatMap(isGossiper);
@@ -158,7 +158,6 @@
 	const singleStepGame = () => {
 		state = getNextState(state, l);
 		generation++;
-		console.log(state);
 		if (activeGossipers === 0) {
 			setRunning(false);
 			gameState = GameState.END;
