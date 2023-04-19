@@ -138,10 +138,19 @@
 	let log = '';
 	let logElement: HTMLTextAreaElement;
 	const writeLog = (msg: string) => {
+		const record = `game=${gameNumber} gen=${generation} | ${msg}`;
+		const limit = 10 * 1000;
+		if (log.length > limit) {
+			const trimmedLog = log.substr(-limit);
+			const firstNl = trimmedLog.indexOf('\n');
+			if (firstNl !== -1) {
+				log = trimmedLog.substr(firstNl);
+			}
+		}
 		if (log !== '') {
 			log += '\n';
 		}
-		log += `game=${gameNumber} gen=${generation} | ${msg}`;
+		log += record;
 		setTimeout(() => {
 			logElement.scroll({ top: logElement.scrollHeight, behavior: 'instant' });
 		});
