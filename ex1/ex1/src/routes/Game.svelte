@@ -111,14 +111,14 @@
 		const gossipers = state.flatMap(isGossiper);
 		const gossipTargets = gossipers.flatMap(getGossipTargets);
 		const gossipCounters = gossipTargets.reduce(
-			(acc, val) => [...acc.slice(0, val), acc[val] + 1, ...acc.slice(val + 1)],
-			new Array(state.length).fill(0)
+			(acc, num) => ((acc[num] = (acc[num] || 0) + 1), acc),
+			{} as { [key: string]: number }
 		);
 		const nextState = state.map((c, i) =>
 			isPerson(c)
 				? {
 						...c,
-						willGossip: decideIfToGossip(c, i, gossipCounters[i]),
+						willGossip: decideIfToGossip(c, i, gossipCounters[i] ?? 0),
 						cooldown: gossipers.includes(i) ? l : Math.max(0, c.cooldown - 1)
 				  }
 				: undefined
