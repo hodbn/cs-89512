@@ -12,6 +12,7 @@
 		kind: PersonKind;
 		willGossip: boolean;
 		cooldown: number;
+		exposed: boolean;
 	};
 	type Cell = Person | undefined;
 	const initializeState = (p: number) => {
@@ -22,7 +23,8 @@
 			const populate = () => ({
 				kind: getRandomPersonKind(),
 				willGossip: false,
-				cooldown: 0
+				cooldown: 0,
+				exposed: false
 			});
 			return new Array(n).fill(undefined).map(() => (shouldPopulate() ? populate() : undefined));
 		};
@@ -37,6 +39,7 @@
 		const state = initializePopulation(n, p);
 		const person = chooseInitialGossiper(state);
 		person.willGossip = true;
+		person.exposed = true;
 		return state;
 	};
 	const indexToCoords = (i: number) => [i % WIDTH, Math.floor(i / HEIGHT)];
@@ -116,11 +119,12 @@
 		);
 		const nextState = state.map((c, i) =>
 			isPerson(c)
-				? {
+				? ({
 						...c,
 						willGossip: decideIfToGossip(c, i, gossipCounters[i] ?? 0),
-						cooldown: gossipers.includes(i) ? l : Math.max(0, c.cooldown - 1)
-				  }
+						cooldown: gossipers.includes(i) ? l : Math.max(0, c.cooldown - 1),
+						exposed: c.exposed || gossipTargets.includes(i)
+				  } as Person)
 				: undefined
 		);
 		return { nextState, numGossipers: gossipers.length };
@@ -129,9 +133,15 @@
 	let p = 0.5;
 	let l = 3;
 	let maxGen = 100;
-	let history = [];
+	type HistoryRecord = {
+		generation: number;
+		numGossipers: number;
+		totalExposed: number;
+	};
+	let history = [] as HistoryRecord[];
 	let lastResult = '';
 	export let activeGossipers: number;
+	export let exposureRate = 0.0;
 	export let generation = 0;
 	export let gameNumber = 0;
 	export let selectedIndex = 0;
@@ -160,7 +170,11 @@
 	};
 	const singleStepGame = () => {
 		const { nextState, numGossipers } = getNextState(state, l);
-		history.push({ generation, numGossipers });
+		const population = nextState.filter(isPerson);
+		const totalPopulation = population.length;
+		const exposedPopulation = population.filter((c) => c.exposed);
+		exposureRate = exposedPopulation.length / totalPopulation;
+		history.push({ generation, numGossipers, totalExposed: exposedPopulation.length });
 		state = nextState;
 		generation++;
 		setTimeout(() => {
@@ -172,6 +186,7 @@
 					{
 						l,
 						p,
+						totalPopulation,
 						activeGossipers,
 						generation,
 						maxGen,
@@ -188,6 +203,7 @@
 	const resetGame = () => {
 		gameNumber++;
 		generation = 0;
+		exposureRate = 0.0;
 		state = initializeState(p);
 		writeLog('game restarted');
 	};
@@ -305,6 +321,11 @@
 						>{gameState === GameState.INITIAL ? 'Start' : 'Restart'}</button
 					>
 				</td>
+			</tr>
+			<tr>
+				<th class="text-start">Exposure rate</th>
+				<td class="text-end">{(exposureRate * 100).toFixed(2)}%</td>
+				<td />
 			</tr>
 			<tr>
 				<th class="text-start">Game number</th>
