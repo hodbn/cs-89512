@@ -355,7 +355,9 @@
 			</tr>
 			<tr>
 				<th class="text-start">Selected cell</th>
-				<td class="text-end min-w-[6rem] font-mono">{state[selectedIndex]?.kind ?? 'Empty'} {indexToCoordsStr(selectedIndex)}</td>
+				<td class="text-end min-w-[6rem] font-mono"
+					>{state[selectedIndex]?.kind ?? 'Empty'} {indexToCoordsStr(selectedIndex)}</td
+				>
 				<td />
 			</tr>
 		</table>
@@ -392,29 +394,48 @@
 			>{lastResult}</textarea
 		>
 	</div>
-	<div
-		class="grid gap-0.5 grid-cols-[repeat(100,_minmax(0,_1fr))] grid-rows-[repeat(100,_minmax(0,_1fr))] bg-white border border-gray-500 shadow-xl text-xs"
-	>
-		{#each state as cell, i (i)}
-			<div
-				class="w-1.5 h-1.5"
-				class:bg-white={cell === undefined}
-				class:bg-gray-100={cell?.kind === PersonKind.S1 && !cell.willGossip}
-				class:bg-gray-200={cell?.kind === PersonKind.S2 && !cell.willGossip}
-				class:bg-gray-300={cell?.kind === PersonKind.S3 && !cell.willGossip}
-				class:bg-gray-400={cell?.kind === PersonKind.S4 && !cell.willGossip}
-				class:bg-red-300={cell?.kind === PersonKind.S1 && cell.willGossip}
-				class:bg-red-400={cell?.kind === PersonKind.S2 && cell.willGossip}
-				class:bg-red-500={cell?.kind === PersonKind.S3 && cell.willGossip}
-				class:bg-red-600={cell?.kind === PersonKind.S4 && cell.willGossip}
-				on:mouseover={() => {
-					selectedIndex = i;
-				}}
-				on:focus={() => {
-					selectedIndex = i;
-				}}
-			/>
-		{/each}
+	<div class="flex flex-col space-y-2">
+		<h1 class="text-lg">Legend</h1>
+		<div class="flex space-x-4 text-sm">
+			<div class="flex">
+				<div class="mr-2">General population:</div>
+				<div class="px-1 bg-gray-100">S1</div>
+				<div class="px-1 bg-gray-200">S2</div>
+				<div class="px-1 bg-gray-300">S3</div>
+				<div class="px-1 bg-gray-400">S4</div>
+			</div>
+			<div class="flex">
+				<div class="mr-2">Gossipers:</div>
+				<div class="px-1 bg-red-300">S1</div>
+				<div class="px-1 bg-red-400">S2</div>
+				<div class="px-1 bg-red-500">S3</div>
+				<div class="px-1 bg-red-600">S4</div>
+			</div>
+		</div>
+		<div
+			class="grid gap-0.5 grid-cols-[repeat(100,_minmax(0,_1fr))] grid-rows-[repeat(100,_minmax(0,_1fr))] bg-white border border-gray-500 shadow-xl text-xs"
+		>
+			{#each state as cell, i (i)}
+				<div
+					class="w-1.5 h-1.5"
+					class:bg-white={cell === undefined}
+					class:bg-gray-100={cell?.kind === PersonKind.S1 && !cell.willGossip}
+					class:bg-gray-200={cell?.kind === PersonKind.S2 && !cell.willGossip}
+					class:bg-gray-300={cell?.kind === PersonKind.S3 && !cell.willGossip}
+					class:bg-gray-400={cell?.kind === PersonKind.S4 && !cell.willGossip}
+					class:bg-red-300={cell?.kind === PersonKind.S1 && cell.willGossip}
+					class:bg-red-400={cell?.kind === PersonKind.S2 && cell.willGossip}
+					class:bg-red-500={cell?.kind === PersonKind.S3 && cell.willGossip}
+					class:bg-red-600={cell?.kind === PersonKind.S4 && cell.willGossip}
+					on:mouseover={() => {
+						selectedIndex = i;
+					}}
+					on:focus={() => {
+						selectedIndex = i;
+					}}
+				/>
+			{/each}
+		</div>
 	</div>
 </div>
 
