@@ -3,10 +3,10 @@
 	const WIDTH = 100;
 	const HEIGHT = 100;
 	enum PersonKind {
-		S1,
-		S2,
-		S3,
-		S4
+		S1 = 'S1',
+		S2 = 'S2',
+		S3 = 'S3',
+		S4 = 'S4'
 	}
 	type Person = {
 		kind: PersonKind;
@@ -134,7 +134,7 @@
 	export let activeGossipers: number;
 	export let generation = 0;
 	export let gameNumber = 0;
-	export let selectedCoords = [0, 0];
+	export let selectedIndex = 0;
 	let state: Cell[] = initializeState(p);
 	$: activeGossipers = state.filter((c) => isPerson(c) && c.willGossip === true).length;
 	export let playHandle = -1;
@@ -354,8 +354,8 @@
 				<td />
 			</tr>
 			<tr>
-				<th class="text-start">Coordinates</th>
-				<td class="text-end min-w-[6rem] font-mono">{coordsToStr(selectedCoords)}</td>
+				<th class="text-start">Selected cell</th>
+				<td class="text-end min-w-[6rem] font-mono">{state[selectedIndex]?.kind ?? 'Empty'} {indexToCoordsStr(selectedIndex)}</td>
 				<td />
 			</tr>
 		</table>
@@ -408,10 +408,10 @@
 				class:bg-red-500={cell?.kind === PersonKind.S3 && cell.willGossip}
 				class:bg-red-600={cell?.kind === PersonKind.S4 && cell.willGossip}
 				on:mouseover={() => {
-					selectedCoords = indexToCoords(i);
+					selectedIndex = i;
 				}}
 				on:focus={() => {
-					selectedCoords = indexToCoords(i);
+					selectedIndex = i;
 				}}
 			/>
 		{/each}
