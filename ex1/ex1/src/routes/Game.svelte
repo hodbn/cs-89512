@@ -103,7 +103,7 @@
 			if (heardCount === 0) {
 				return false;
 			}
-			const wantsToGossip = p.cooldown === 0 && shouldGossip(p, heardCount);
+			const wantsToGossip = (!p.willGossip || l === 0) && p.cooldown === 0 && shouldGossip(p, heardCount);
 			// if (wantsToGossip) {
 			// 	writeLog(`${indexToCoordsStr(i)}: decides to gossip`);
 			// } else {
