@@ -18,15 +18,45 @@
 	const initializeState = (p: number) => {
 		const initializePopulation = (n: number, p: number) => {
 			const shouldPopulate = () => Math.random() < p;
-			const getRandomPersonKind = () =>
+			const getRandomPersonKind = (_) =>
 				randomChoice([PersonKind.S1, PersonKind.S2, PersonKind.S3, PersonKind.S4]);
-			const populate = () => ({
-				kind: getRandomPersonKind(),
+			const getRandomPersonKindClusters = (i: number) => {
+				const [x, y] = indexToCoords(i);
+				if (x >= WIDTH / 2 && y < HEIGHT / 2) {
+					return PersonKind.S2;
+				}
+				if (x < WIDTH / 2 && y >= HEIGHT / 2) {
+					return PersonKind.S3;
+				}
+				if (x >= WIDTH / 2 && y >= HEIGHT / 2) {
+					return PersonKind.S4;
+				}
+				if (x < WIDTH / 2 && y < HEIGHT / 2) {
+					return PersonKind.S1;
+				}
+			};
+			const getRandomPersonKindStripes = (i: number) => {
+				const [x, y] = indexToCoords(i);
+				if (x % 4 === 0) {
+					return PersonKind.S4;
+				}
+				if (x % 3 === 0) {
+					return PersonKind.S3;
+				}
+				if (x % 2 === 0) {
+					return PersonKind.S2;
+				}
+				return PersonKind.S1;
+			};
+			const populate = (i: number) => ({
+				kind: getRandomPersonKind(i),
 				willGossip: false,
 				cooldown: 0,
 				exposed: false
 			});
-			return new Array(n).fill(undefined).map(() => (shouldPopulate() ? populate() : undefined));
+			return new Array(n)
+				.fill(undefined)
+				.map((_, i) => (shouldPopulate() ? populate(i) : undefined));
 		};
 		const chooseInitialGossiper = (state: Cell[]) => {
 			const population = state.reduce(
@@ -103,7 +133,8 @@
 			if (heardCount === 0) {
 				return false;
 			}
-			const wantsToGossip = (!p.willGossip || l === 0) && p.cooldown === 0 && shouldGossip(p, heardCount);
+			const wantsToGossip =
+				(!p.willGossip || l === 0) && p.cooldown === 0 && shouldGossip(p, heardCount);
 			// if (wantsToGossip) {
 			// 	writeLog(`${indexToCoordsStr(i)}: decides to gossip`);
 			// } else {
