@@ -14,7 +14,7 @@ class GeneticAlgorithm(Protocol):
     def mutate(self, ind: Individual) -> Individual:
         ...
 
-    def init_population(self, size: int) -> Population:
+    def generate_individual(self) -> Individual:
         ...
 
     def end_condition(self, pop: Population, gen: int) -> bool:
