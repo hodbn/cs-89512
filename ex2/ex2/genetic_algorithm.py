@@ -1,6 +1,6 @@
 from typing import Protocol
 
-Individual = dict[int, int]
+Individual = list[int]
 Population = list[Individual]
 
 
