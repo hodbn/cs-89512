@@ -1,20 +1,15 @@
 from typing import Protocol
 
-Individual = list[int]
+Individual = str
 Population = list[Individual]
 
 
 class GeneticAlgorithm(Protocol):
+    @property
+    def bits(self) -> int:
+        ...
+
     def fitness(self, ind: Individual) -> float:
-        ...
-
-    def crossover(self, parent1: Individual, parent2: Individual) -> Individual:
-        ...
-
-    def mutate(self, ind: Individual) -> Individual:
-        ...
-
-    def generate_individual(self) -> Individual:
         ...
 
     def end_condition(self, pop: Population, gen: int) -> bool:

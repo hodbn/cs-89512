@@ -1,10 +1,17 @@
+import math
+import string
+
 from genetic_algorithm import GeneticAlgorithm, Individual, Population
 
+ALEPHBET = string.ascii_lowercase
+N = math.factorial(len(ALEPHBET))
+BITS = math.ceil(math.log2(N))
 
-class DummyImpl(GeneticAlgorithm):
+
+class Impl(GeneticAlgorithm):
     @property
     def bits(self):
-        raise NotImplementedError()
+        return BITS
 
     def fitness(self, ind: Individual) -> float:
         raise NotImplementedError()
