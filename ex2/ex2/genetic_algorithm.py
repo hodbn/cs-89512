@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Protocol
 
 Individual = str
@@ -14,3 +15,10 @@ class GeneticAlgorithm(Protocol):
 
     def end_condition(self, pop: Population, gen: int) -> bool:
         ...
+
+
+@dataclass
+class GAParams:
+    pop_size_init: int
+    pop_size_max: int
+    mutation_prob: float
