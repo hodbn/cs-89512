@@ -5,9 +5,9 @@ from cipher import decrypt, encrypt
 
 
 def test_encrypt():
-    assert encrypt("ABC", "ABC", [0, 1, 2]) == "ABC"
-    assert encrypt("ABC", "ABC", [0, 2, 1]) == "ACB"
-    assert encrypt("ABC", ".ABC,", [0, 1, 2]) == ".ABC,"
+    assert encrypt("ABC", [0, 1, 2], "ABC") == "ABC"
+    assert encrypt("ABC", [0, 2, 1], "ABC") == "ACB"
+    assert encrypt("ABC", [0, 1, 2], ".ABC,") == ".ABC,"
 
 
 def test_encrypt_decrypt():
@@ -18,5 +18,5 @@ def test_encrypt_decrypt():
         plain = "".join(random.choices(alephbet, k=length))
         perm = list(range(len(alephbet)))
         random.shuffle(perm)
-        ciphertext = encrypt(alephbet, plain, perm)
-        assert decrypt(alephbet, ciphertext, perm) == plain
+        ciphertext = encrypt(alephbet, perm, plain)
+        assert decrypt(alephbet, perm, ciphertext) == plain
