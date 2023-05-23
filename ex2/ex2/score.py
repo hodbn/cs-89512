@@ -21,6 +21,14 @@ def freq2_score(text: str) -> float:
     pass
 
 
+def combine_freq_scores(f1score: float, f2score: float) -> float:
+    return (f1score + f2score) / 2
+
+
+def combine_candidates_scores(scores: list[float]) -> float:
+    return sum(scores) / len(scores)
+
+
 def dict_score(text: str) -> float:
     """
     go over text
