@@ -16,6 +16,10 @@ class GeneticAlgorithm(Protocol):
     def end_condition(self, pop: Population, gen: int) -> Optional[Individual]:
         ...
 
+    @property
+    def fitness_calls(self) -> int:
+        ...
+
 
 @dataclass
 class GAParams:
