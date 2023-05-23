@@ -1,7 +1,7 @@
 import random
 
-from gaparams import GAParams
-from genetic_algorithm import GeneticAlgorithm, Individual, Population
+from genetic_algorithm import (GAParams, GeneticAlgorithm, Individual,
+                               Population)
 
 
 def generate_individual(ga: GeneticAlgorithm) -> Individual:
