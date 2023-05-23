@@ -23,19 +23,18 @@ def crossover(
     ga: GeneticAlgorithm, parent1: Individual, parent2: Individual
 ) -> Individual:
     pos = random.randint(0, ga.bits - 1)
-    return parent1[:pos] + parent2[pos + 1 :]
+    return parent1[:pos] + parent2[pos:]
 
 
-def select(ga: GeneticAlgorithm, pop: Population) -> Individual:
+def select_parents(ga: GeneticAlgorithm, pop: Population) -> Individual:
     weights = list(map(ga.fitness, pop))
-    return random.choices(pop, weights=weights, k=1)[0]
+    return random.choices(pop, weights=weights, k=2)
 
 
 def spawn_offspring(
     ga: GeneticAlgorithm, pop: Population, params: GAParams
 ) -> Individual:
-    parent1 = select(ga, pop)
-    parent2 = select(ga, pop)
+    parent1, parent2 = select_parents(ga, pop)
     offspring = crossover(ga, parent1, parent2)
     mutated_offspring = mutate(offspring, params)
     return mutated_offspring
@@ -50,6 +49,10 @@ def next_generation(
 def run_algorithm(ga: GeneticAlgorithm, params: GAParams) -> Individual:
     pop = init_population(ga, params.pop_size_init)
     gen = 0
-    while not ga.end_condition(pop, gen):
+    while True:
+        solution = ga.end_condition(pop, gen)
+        if solution is not None:
+            break
         pop = next_generation(ga, pop, params)
-    return max(pop, key=ga.fitness)
+        gen += 1
+    return solution
