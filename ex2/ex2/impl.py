@@ -49,8 +49,9 @@ class Impl(GeneticAlgorithm):
 
     def fitness(self, ind: Individual) -> float:
         candidates = self.get_candidates(ind)
-        freq_scores = map(freq_score, candidates)
-        freq2_scores = map(freq2_score, candidates)
+        freq_scores = list(map(freq_score, candidates))
+        # freq2_scores = map(freq2_score, candidates)
+        freq2_scores = list(freq_scores)
         scores = list(
             itertools.starmap(combine_freq_scores, zip(freq_scores, freq2_scores))
         )

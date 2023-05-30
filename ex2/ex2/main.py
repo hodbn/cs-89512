@@ -1,10 +1,13 @@
 from dummy_impl import DummyImpl
+from genetic_algorithm import GAParams
 from impl import Impl
-from params import params
 from runner import run_algorithm
 
 
 def main():
+    params = GAParams(
+        pop_size_init=80, pop_size_max=50, mutation_prob=0.2, crossover_prob=0.8
+    )
     impl = Impl(1.0, 0.1, ciphertexts=[open("enc.txt", "r").read()])
     solution = run_algorithm(impl, params)
     print(f"solution={solution}")

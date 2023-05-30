@@ -1,4 +1,5 @@
 import functools
+import itertools
 import math
 import re
 import string
@@ -72,11 +73,6 @@ def drop_pairs_with_spaces(frequencies: dict) -> dict:
 
 
 def freq_score(text: str) -> float:
-    # todo real frequencies
-
-    # Remove punctuation and spaces from the text
-    text = re.sub(f"[{re.escape(punctuation)}\\s]+", "", text)
-
     # Create a frequency table for English letters in the text
     # todo is it encoded or decoded
     encoded_frequencies = create_frequency_table(text)
@@ -90,8 +86,14 @@ def freq_score(text: str) -> float:
     return score
 
 
+def letter_pairwise(text: str):
+    all_pairs = itertools.pairwise(text)
+    res = map(lambda p: p[0] + p[1], all_pairs)
+    return list(res)
+
+
 def freq2_score(text: str) -> float:
-    pairs = re.findall(f"(?=([{string.ascii_lowercase}]{{2}}))", text.lower())
+    pairs = letter_pairwise(text.lower())
 
     # Create a frequency table for pairs of English letters in the text
     english_frequencies = create_pair_freq_table(pairs)

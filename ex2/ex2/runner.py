@@ -49,7 +49,10 @@ def run_algorithm(ga: GeneticAlgorithm, params: GAParams) -> Individual:
         if solution is not None:
             break
         pop = next_generation(ga, pop, params)
-        # top5 = {k: ga.fitness(k) for k in sorted(pop, key=ga.fitness)[:5]}
-        # print(f"{gen}: top-5: {top5}")
+        top5 = {k: ga.fitness(k) for k in sorted(pop, key=ga.fitness)[:5]}
+        print(f"{gen}: top-5: {top5}")
+        if gen > 0:
+            for x in top5:
+                print(ga.get_candidates(x)[0][:100])
         gen += 1
     return solution
