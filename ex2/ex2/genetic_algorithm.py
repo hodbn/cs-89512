@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, Protocol
 
-Individual = list[int]
+Individual = tuple[int]
 Population = list[Individual]
 
 
@@ -9,10 +9,10 @@ class GeneticAlgorithm(Protocol):
     def generate_individual(self) -> Individual:
         ...
 
-    def mutate(self, ind: Individual, mutation_prob: float) -> Individual:
+    def mutate(self, ind: Individual) -> Individual:
         ...
 
-    def crossover(self, parent1: Individual, parent2: Individual) -> Individual:
+    def crossover(self, parent1: Individual, parent2: Individual) -> list[Individual]:
         ...
 
     def fitness(self, ind: Individual) -> float:
