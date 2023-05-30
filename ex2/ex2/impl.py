@@ -1,20 +1,19 @@
 import functools
 import itertools
-import math
+import random
 import string
 from typing import Optional
 
 from cipher import decrypt
 from genetic_algorithm import GeneticAlgorithm, Individual, Population
-from perm import decode_perm
+from perm import perm_crossover_pmx, perm_mutate_inversion
 from score import (combine_candidates_scores, combine_freq_scores, dict_score,
                    freq2_score, freq_score)
 
 
 class Impl(GeneticAlgorithm):
     ALEPHBET = string.ascii_lowercase
-    N = math.factorial(len(ALEPHBET))
-    BITS = math.ceil(math.log2(N))
+    N = len(ALEPHBET)
 
     def __init__(
         self, objective: float, solutions_threshold: float, ciphertexts: list[str]
@@ -25,12 +24,25 @@ class Impl(GeneticAlgorithm):
         self.ciphertexts = ciphertexts
         self.calls = 0
 
-    @property
-    def bits(self):
-        return self.BITS
+    def generate_individual(self) -> Individual:
+        ind = list(range(self.N))
+        random.shuffle(ind)
+        return tuple(ind)
+
+    def mutate(self, ind: Individual) -> Individual:
+        # inversion permutation
+        i = random.randint(0, self.N - 1)
+        j = (i + random.randint(1, self.N - 1)) % self.N
+        return perm_mutate_inversion(ind, i, j)
+
+    def crossover(self, parent1: Individual, parent2: Individual) -> Individual:
+        i = random.randint(0, self.N - 1)
+        j = (i + random.randint(1, self.N - 1)) % self.N
+
+        return perm_crossover_pmx(parent1, parent2, i, j)
 
     def get_candidates(self, ind: Individual) -> list[str]:
-        perm = decode_perm(ind, self.N)
+        perm = list(ind)
         decrypt_with_perm = functools.partial(decrypt, self.ALEPHBET, perm)
         candidates = list(map(decrypt_with_perm, self.ciphertexts))
         return candidates

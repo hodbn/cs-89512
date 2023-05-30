@@ -16,7 +16,7 @@ def select(ga: GeneticAlgorithm, pop: Population, n: int) -> list[Individual]:
 
 def spawn_offspring(ga: GeneticAlgorithm, pop: Population) -> Individual:
     parent1, parent2 = select(ga, pop, 2)
-    offspring = random.choice(ga.crossover(parent1, parent2))
+    offspring = ga.crossover(parent1, parent2)
     return offspring
 
 

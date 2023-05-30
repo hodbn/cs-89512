@@ -18,9 +18,11 @@ class DummyImpl(GeneticAlgorithm):
         pos = random.randint(0, self.bits - 1)
         return tuple(b if i != pos else 1 - b for i, b in enumerate(ind))
 
-    def crossover(self, parent1: Individual, parent2: Individual) -> list[Individual]:
+    def crossover(self, parent1: Individual, parent2: Individual) -> Individual:
         pos = random.randint(0, self.bits - 1)
-        return [parent1[:pos] + parent2[pos:], parent2[:pos] + parent1[pos:]]
+        return random.choice(
+            [parent1[:pos] + parent2[pos:], parent2[:pos] + parent1[pos:]]
+        )
 
     @functools.cache
     def fitness(self, ind: Individual) -> float:

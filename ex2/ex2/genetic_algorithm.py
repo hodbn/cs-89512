@@ -12,7 +12,7 @@ class GeneticAlgorithm(Protocol):
     def mutate(self, ind: Individual) -> Individual:
         ...
 
-    def crossover(self, parent1: Individual, parent2: Individual) -> list[Individual]:
+    def crossover(self, parent1: Individual, parent2: Individual) -> Individual:
         ...
 
     def fitness(self, ind: Individual) -> float:
