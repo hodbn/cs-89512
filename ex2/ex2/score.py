@@ -1,6 +1,7 @@
 import math
 import re
 import string
+from collections import defaultdict
 from itertools import tee
 from string import punctuation
 
@@ -50,21 +51,16 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-def create_pair_freq_table(text: str) -> dict:
+def create_pair_freq_table(pairs: list[str]) -> dict[str, float]:
     # Create and return a frequency table for English letter pairs in the text
+    counts = defaultdict(int)
     frequencies = {}
-    # count frequencies
-    for letter in pairwise(text.lower()):
-        if letter[0].isalpha() and letter[1].isalpha():
-            l = "".join(letter)
-            frequencies[l] = frequencies.get(l, 0) + 1
-    sum = 0
-    # count paiur frequencies
-    for letter, count in pairwise(frequencies.items()):
-        sum += count
-    #
-    for letter, count in pairwise(frequencies.items()):
-        frequencies[letter] = count / sum
+
+    for pair in pairs:
+        counts[pair] += 1
+
+    total = sum(counts.values())
+    frequencies = {pair: count / total for (pair, count) in counts.items()}
 
     return frequencies
 
@@ -111,12 +107,10 @@ def freq_score(text: str) -> float:
 
 
 def freq2_score(text: str) -> float:
-    # Remove punctuation from the text
-    # todo shouldwe get rid of this (is alpha in other function skips punctuation anyway
-    text = re.sub(f"[{re.escape(punctuation)}]", "", text)
+    pairs = re.findall(f"(?=([{string.ascii_lowercase}]{{2}}))", text.lower())
 
     # Create a frequency table for pairs of English letters in the text
-    english_frequencies = create_pair_freq_table(text)
+    english_frequencies = create_pair_freq_table(pairs)
 
     # Read real English frequency table from Letter2_Freq.txt
     real_frequencies = read_frequencies("Letter2_Freq.txt")
