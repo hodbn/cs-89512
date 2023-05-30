@@ -63,7 +63,7 @@ class Impl(GeneticAlgorithm):
         return combine_candidates_scores(scores)
 
     def end_condition(self, pop: Population, gen: int) -> Optional[Individual]:
-        k = len(pop) * self.solutions_threshold
+        k = int(len(pop) * self.solutions_threshold)
         topk = sorted(pop, key=self.fitness, reverse=True)[:k]
         oscores = list(map(self.get_oscore, topk))
         best_oscore = max(oscores)
