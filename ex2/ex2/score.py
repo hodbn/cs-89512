@@ -1,8 +1,8 @@
+import functools
 import math
 import re
 import string
-from collections import defaultdict
-from itertools import tee
+from collections import Counter
 from string import punctuation
 
 
@@ -30,41 +30,25 @@ def calculate_score(frequencies1: dict, frequencies2: dict) -> float:
 
 
 def create_frequency_table(text: str) -> dict:
-    # Create and return a frequency table for English letters in the text
-    frequencies = {}
-    total_letters = len(text)
-
-    for letter in text.lower():
-        if letter.isalpha():
-            frequencies[letter] = frequencies.get(letter, 0) + 1
-
-    for letter, count in frequencies.items():
-        frequencies[letter] = count / total_letters
+    text = text.lower()
+    counts = {c: text.count(c) for c in string.ascii_lowercase}
+    total = sum(counts.values())
+    frequencies = {c: count / total for (c, count) in counts.items()}
 
     return frequencies
 
 
-def pairwise(iterable):
-    # pairwise('ABCDEFG') --> AB BC CD DE EF FG
-    a, b = tee(iterable)
-    next(b, None)
-    return zip(a, b)
-
-
 def create_pair_freq_table(pairs: list[str]) -> dict[str, float]:
-    # Create and return a frequency table for English letter pairs in the text
-    counts = defaultdict(int)
+    counts = Counter(pairs)
     frequencies = {}
 
-    for pair in pairs:
-        counts[pair] += 1
-
-    total = sum(counts.values())
+    total = counts.total()
     frequencies = {pair: count / total for (pair, count) in counts.items()}
 
     return frequencies
 
 
+@functools.cache
 def read_frequencies(filename: str) -> dict:
     # Load letter frequency data from a file
     frequencies = {}
