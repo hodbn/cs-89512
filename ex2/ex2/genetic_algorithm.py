@@ -1,13 +1,18 @@
 from dataclasses import dataclass
 from typing import Optional, Protocol
 
-Individual = str
+Individual = list[int]
 Population = list[Individual]
 
 
 class GeneticAlgorithm(Protocol):
-    @property
-    def bits(self) -> int:
+    def generate_individual(self) -> Individual:
+        ...
+
+    def mutate(self, ind: Individual, mutation_prob: float) -> Individual:
+        ...
+
+    def crossover(self, parent1: Individual, parent2: Individual) -> Individual:
         ...
 
     def fitness(self, ind: Individual) -> float:
@@ -26,3 +31,4 @@ class GAParams:
     pop_size_init: int
     pop_size_max: int
     mutation_prob: float
+    crossover_prob: float
