@@ -23,6 +23,7 @@ class Impl(GeneticAlgorithm):
         self.objective = objective
         self.solutions_threshold = solutions_threshold
         self.ciphertexts = ciphertexts
+        self.calls = 0
 
     @property
     def bits(self):
@@ -58,3 +59,7 @@ class Impl(GeneticAlgorithm):
             return None
         solution = topk[oscores.index(best_oscore)]
         return solution
+
+    @property
+    def fitness_calls(self) -> int:
+        return self.calls
