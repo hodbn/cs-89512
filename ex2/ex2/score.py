@@ -1,8 +1,8 @@
 import math
 import re
+import string
 from itertools import tee
 from string import punctuation
-import string
 
 
 def calculate_score(frequencies1: dict, frequencies2: dict) -> float:
@@ -14,48 +14,10 @@ def calculate_score(frequencies1: dict, frequencies2: dict) -> float:
     for letter, frequency in frequencies1.items():
         if letter in frequencies2:
             numerator += frequency * frequencies2[letter]
-        sum_freq1_squared += frequency ** 2
-    #
-    # for letter, frequency in frequencies2.items():
-    #     sum_freq2_squared += frequency ** 2
-
-    denominator = math.sqrt(sum_freq1_squared)
-
-    if denominator == 0.0:
-        return 0.0
-
-    score = numerator / denominator
-    return score
-
-def create_frequency_table(text: str) -> dict:
-    # Create and return a frequency table for English letters in the text
-    frequencies = {}
-    total_letters = len(text)
-
-    for letter in text.lower():
-        if letter.isalpha():
-            frequencies[letter] = frequencies.get(letter, 0) + 1
-
-    for letter, count in frequencies.items():
-        frequencies[letter] = (count / total_letters)
-    import math
-    import re
-    from string import punctuation
-    import string
-
-def calculate_score(frequencies1: dict, frequencies2: dict) -> float:
-    numerator = 0.0
-    sum_freq1_squared = 0.0
-    sum_freq2_squared = 0.0
-
-    # Compare frequency tables and create a score  using cosine similarity
-    for letter, frequency in frequencies1.items():
-        if letter in frequencies2:
-            numerator += frequency * frequencies2[letter]
-        sum_freq1_squared += frequency ** 2
+        sum_freq1_squared += frequency**2
 
     for letter, frequency in frequencies2.items():
-        sum_freq2_squared += frequency ** 2
+        sum_freq2_squared += frequency**2
 
     denominator = math.sqrt(sum_freq1_squared) * math.sqrt(sum_freq2_squared)
 
@@ -65,6 +27,7 @@ def calculate_score(frequencies1: dict, frequencies2: dict) -> float:
     score = numerator / denominator
     return score
 
+
 def create_frequency_table(text: str) -> dict:
     # Create and return a frequency table for English letters in the text
     frequencies = {}
@@ -75,15 +38,17 @@ def create_frequency_table(text: str) -> dict:
             frequencies[letter] = frequencies.get(letter, 0) + 1
 
     for letter, count in frequencies.items():
-        frequencies[letter] = (count / total_letters)
+        frequencies[letter] = count / total_letters
 
     return frequencies
+
 
 def pairwise(iterable):
     # pairwise('ABCDEFG') --> AB BC CD DE EF FG
     a, b = tee(iterable)
     next(b, None)
     return zip(a, b)
+
 
 def create_pair_freq_table(text: str) -> dict:
     # Create and return a frequency table for English letter pairs in the text
@@ -99,9 +64,10 @@ def create_pair_freq_table(text: str) -> dict:
         sum += count
     #
     for letter, count in pairwise(frequencies.items()):
-        frequencies[letter] = (count / sum)
+        frequencies[letter] = count / sum
 
     return frequencies
+
 
 def read_frequencies(filename: str) -> dict:
     # Load letter frequency data from a file
@@ -109,7 +75,7 @@ def read_frequencies(filename: str) -> dict:
 
     with open(filename) as f:
         for line in f:
-            m = re.match(r'(\d+\.\d+)\s+([a-zA-Z]+)', line)
+            m = re.match(r"(\d+\.\d+)\s+([a-zA-Z]+)", line)
             if m:
                 frequency = float(m.group(1))
                 letter = m.group(2).lower()
@@ -117,16 +83,19 @@ def read_frequencies(filename: str) -> dict:
 
     return frequencies
 
+
 def drop_pairs_with_spaces(frequencies: dict) -> dict:
     # Drop pairs with spaces from the frequency table
-    return {pair: frequency for pair, frequency in frequencies.items() if " " not in pair}
+    return {
+        pair: frequency for pair, frequency in frequencies.items() if " " not in pair
+    }
 
-def freq_score(text: str, real_frequencies) -> float:
 
-    #todo real frequencies
+def freq_score(text: str) -> float:
+    # todo real frequencies
 
     # Remove punctuation and spaces from the text
-    text = re.sub(f"[{re.escape(punctuation)}\s]+", "", text)
+    text = re.sub(f"[{re.escape(punctuation)}\\s]+", "", text)
 
     # Create a frequency table for English letters in the text
     # todo is it encoded or decoded
@@ -140,7 +109,8 @@ def freq_score(text: str, real_frequencies) -> float:
 
     return score
 
-def freq2_score(text: str, real_frequencies) -> float:
+
+def freq2_score(text: str) -> float:
     # Remove punctuation from the text
     # todo shouldwe get rid of this (is alpha in other function skips punctuation anyway
     text = re.sub(f"[{re.escape(punctuation)}]", "", text)
@@ -156,6 +126,7 @@ def freq2_score(text: str, real_frequencies) -> float:
 
     return score
 
+
 def dict_score(text: str) -> float:
     # Remove punctuation from the text
     text = text.translate(str.maketrans("", "", string.punctuation))
@@ -164,7 +135,7 @@ def dict_score(text: str) -> float:
     words = text.split()
 
     # Read the dictionary words from dict.txt
-    with open('dict.txt', 'r') as file:
+    with open("dict.txt", "r") as file:
         dictionary_words = set(line.strip().lower() for line in file)
 
     # Calculate the ratio of words that exist in the dictionary
@@ -176,13 +147,9 @@ def dict_score(text: str) -> float:
     return ratio
 
 
-
 def combine_freq_scores(f1score: float, f2score: float) -> float:
     return (f1score + f2score) / 2
 
 
 def combine_candidates_scores(scores: list[float]) -> float:
     return sum(scores) / len(scores)
-
-
-
