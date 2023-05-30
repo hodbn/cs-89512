@@ -12,16 +12,15 @@ class DummyImpl(GeneticAlgorithm):
         self.bits = bits
 
     def generate_individual(self) -> Individual:
-        return [random.randint(0, 1) for _ in range(self.bits)]
+        return tuple(random.randint(0, 1) for _ in range(self.bits))
 
-    def mutate(self, ind: Individual, mutation_prob: float) -> Individual:
-        return [b if random.random() < mutation_prob else 1 - b for b in ind]
-
-    def crossover(self, parent1: Individual, parent2: Individual) -> Individual:
+    def mutate(self, ind: Individual) -> Individual:
         pos = random.randint(0, self.bits - 1)
-        opt1 = parent1[:pos] + parent2[pos:]
-        opt2 = parent2[:pos] + parent1[pos:]
-        return random.choice([opt1, opt2])
+        return tuple(b if i != pos else 1 - b for i, b in enumerate(ind))
+
+    def crossover(self, parent1: Individual, parent2: Individual) -> list[Individual]:
+        pos = random.randint(0, self.bits - 1)
+        return [parent1[:pos] + parent2[pos:], parent2[:pos] + parent1[pos:]]
 
     @functools.cache
     def fitness(self, ind: Individual) -> float:
