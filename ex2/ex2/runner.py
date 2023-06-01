@@ -1,6 +1,7 @@
 import math
 import random
 
+import numpy as np
 from genetic_algorithm import (GAParams, GeneticAlgorithm, Individual,
                                Population)
 
@@ -25,7 +26,15 @@ def copy(ga: GeneticAlgorithm, pop: Population, n: int) -> Population:
 
 
 def crossover(ga: GeneticAlgorithm, pop: Population, n: int) -> Population:
-    return [spawn_offspring(ga, pop) for _ in range(n)]
+    # return [spawn_offspring(ga, pop) for _ in range(n)]
+
+    elite = select(ga, pop, n)
+    return [spawn_offspring(ga, elite) for _ in range(n)]
+
+    # elite = select(ga, pop, n)
+    # random.shuffle(elite)
+    # elite_pairs = zip(elite[::2], elite[1::2])
+    # return [spawn_offspring_pair(ga, pair) for pair in elite_pairs]
 
 
 def mutate(ga: GeneticAlgorithm, pop: Population, mutation_prob: float):
@@ -49,10 +58,19 @@ def run_algorithm(ga: GeneticAlgorithm, params: GAParams) -> Individual:
         if solution is not None:
             break
         pop = next_generation(ga, pop, params)
-        top5 = {k: ga.fitness(k) for k in sorted(pop, key=ga.fitness)[:5]}
-        print(f"{gen}: top-5: {top5}")
-        if gen > 0:
-            for x in top5:
-                print(ga.get_candidates(x)[0][:100])
+        topn = list(sorted(pop, key=ga.fitness, reverse=True)[:10])
+        botn = list(sorted(pop, key=ga.fitness)[:10])
+        print(f"{gen}")
+        avg_fitness = sum(map(ga.fitness, pop)) / len(pop)
+        avg_topn_fitness = sum(map(ga.fitness, topn)) / len(topn)
+        avg_botn_fitness = sum(map(ga.fitness, botn)) / len(botn)
+        best_fitness = ga.fitness(topn[0])
+        ga.metrics.avg_fitness.append(avg_fitness)
+        ga.metrics.avg_topn_fitness.append(avg_topn_fitness)
+        ga.metrics.avg_botn_fitness.append(avg_botn_fitness)
+        ga.metrics.diff_inds.append(len(set(pop)))
+        ga.metrics.best_fitness.append(best_fitness)
         gen += 1
+        if gen == 600:
+            break
     return solution

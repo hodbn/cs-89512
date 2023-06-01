@@ -1,8 +1,18 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional, Protocol
 
 Individual = tuple[int]
 Population = list[Individual]
+
+
+@dataclass
+class GAMetrics:
+    avg_fitness: list[float] = field(default_factory=list)
+    best_fitness: list[float] = field(default_factory=list)
+    avg_topn_fitness: list[float] = field(default_factory=list)
+    avg_botn_fitness: list[float] = field(default_factory=list)
+    diff_inds: list[float] = field(default_factory=list)
+    fitness_calls: int = 0
 
 
 class GeneticAlgorithm(Protocol):
@@ -22,7 +32,7 @@ class GeneticAlgorithm(Protocol):
         ...
 
     @property
-    def fitness_calls(self) -> int:
+    def metrics(self) -> GAMetrics:
         ...
 
 

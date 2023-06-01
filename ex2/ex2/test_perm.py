@@ -1,4 +1,4 @@
-from perm import perm_crossover_pmx, perm_mutate_inversion
+from perm import perm_crossover_pbx, perm_crossover_pmx, perm_mutate_inversion
 
 trans = lambda x: ord(x) - ord("A")
 
@@ -50,3 +50,11 @@ def test_crossover_pmx():
     assert perm_crossover_pmx(
         tuple(map(trans, "ABCDEFGH")), tuple(map(trans, "CGEAFHBD")), 3, 5
     ) == tuple(map(trans, "CGHDEFBA"))
+
+
+def test_crossover_pbx():
+    assert perm_crossover_pbx(
+        tuple(map(trans, "314675298")),
+        tuple(map(trans, "347129685")),
+        [0, 1, 0, 1, 0, 0, 1, 1, 0],
+    ) == tuple(map(trans, "314678295"))

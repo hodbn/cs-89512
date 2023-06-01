@@ -93,6 +93,10 @@ def letter_pairwise(text: str):
 
 
 def freq2_score(text: str) -> float:
+    text = text.replace(" ", "")
+    text = text.replace("\n", "")
+    text = text.replace(",", "")
+    text = text.replace(".", "")
     pairs = letter_pairwise(text.lower())
 
     # Create a frequency table for pairs of English letters in the text
