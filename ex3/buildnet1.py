@@ -1,24 +1,12 @@
+import pickle
+
 import numpy as np
+from funcs import get_dataset_fn, get_wnet_fn, mse, mse_prime, tanh, tanh_prime
 from network import ActivationLayer, FCLayer, Network
+from utils import concrete_predict
 
-DATASET_FN = "nn0.txt"
-OUTPUT_FN = "wnet"
-
-
-def mse(y_true, y_pred):
-    return np.mean(np.power(y_true - y_pred, 2))
-
-
-def mse_prime(y_true, y_pred):
-    return 2 * (y_pred - y_true) / y_true.size
-
-
-def tanh(x):
-    return np.tanh(x)
-
-
-def tanh_prime(x):
-    return 1 - np.tanh(x) ** 2
+DATASET_FN = get_dataset_fn(1)
+OUTPUT_FN = get_wnet_fn(1)
 
 
 def open_dataset(fn):
@@ -40,18 +28,19 @@ def read_dataset(dataset: list[str]):
     return list(map(np.array, zip(*map(load_entry, dataset))))
 
 
-def measure(out_probs, y_test):
-    # choose binary outputs (true iff >= 0.5)
-    out = [(item[0] > 0.5).astype(int) for item in out_probs]
+def measure(out, y_test):
     results = np.equal(out, y_test).all(axis=1)
     return results.sum() / float(results.size)
 
 
 def main():
+    print("*** building network ***")
     dataset = open_dataset(DATASET_FN)
-    train, test = split_dataset(dataset, 0.75)
     print(f"dataset file = {DATASET_FN}")
     print(f"dataset size = {len(dataset)}")
+    print("splitting dataset...")
+
+    train, test = split_dataset(dataset, 0.75)
     print(f"train size = {len(train)}")
     print(f"test size = {len(test)}")
     x_train, y_train = read_dataset(train)
@@ -76,15 +65,16 @@ def main():
     print("testing...")
 
     # test
-    out = net.predict(x_test)
+    out_probs = net.predict(x_test)
+    out = concrete_predict(out_probs)
 
     # get success rate
     success_rate = measure(out, y_test)
     print(f"success rate = {success_rate}")
 
-    # training, test = split_dataset(15000)
-    # buildnet0(training, test)
-    # pass
+    # save network
+    pickle.dump(net, open(OUTPUT_FN, "wb"))
+    print(f"network saved to {OUTPUT_FN}")
 
 
 if __name__ == "__main__":
