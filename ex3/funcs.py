@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 
 
@@ -30,8 +32,16 @@ def get_test_fn(n):
 
 
 def get_wnet_fn(n):
-    return f"wnet{n}"
+    return f"wnet{n}.txt"
 
 
 def get_dataset_fn(n):
     return f"nn{n}.txt"
+
+
+def get_train_dataset_fn(dataset_fn: Path):
+    return Path(f"{dataset_fn.stem}_train").with_suffix(dataset_fn.suffix)
+
+
+def get_test_dataset_fn(dataset_fn: Path):
+    return Path(f"{dataset_fn.stem}_test").with_suffix(dataset_fn.suffix)
