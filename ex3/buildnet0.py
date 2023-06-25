@@ -1,9 +1,9 @@
 import pickle
 
 import numpy as np
-from funcs import get_dataset_fn, get_wnet_fn, mse, mse_prime, tanh, tanh_prime
+from funcs import (concrete_predict, get_dataset_fn, get_wnet_fn, mse,
+                   mse_prime, tanh, tanh_prime)
 from network import ActivationLayer, FCLayer, Network
-from utils import concrete_predict
 
 DATASET_FN = get_dataset_fn(0)
 OUTPUT_FN = get_wnet_fn(0)

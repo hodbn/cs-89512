@@ -45,3 +45,8 @@ def get_train_dataset_fn(dataset_fn: Path):
 
 def get_test_dataset_fn(dataset_fn: Path):
     return Path(f"{dataset_fn.stem}_test").with_suffix(dataset_fn.suffix)
+
+
+def concrete_predict(out_probs):
+    # choose binary outputs (true iff >= 0.5)
+    return [(item[0] > 0.5).astype(int) for item in out_probs]

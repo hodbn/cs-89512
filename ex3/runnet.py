@@ -1,10 +1,9 @@
 import pickle
 
 import numpy as np
-from funcs import (get_predicted_fn, get_test_fn, get_wnet_fn, mse, mse_prime,
-                   tanh, tanh_prime)
+from funcs import (concrete_predict, get_predicted_fn, get_test_fn,
+                   get_wnet_fn, mse, mse_prime, tanh, tanh_prime)
 from network import ActivationLayer, FCLayer, Network
-from utils import concrete_predict
 
 
 def open_testset(fn):
