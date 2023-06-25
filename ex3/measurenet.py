@@ -1,9 +1,17 @@
 import itertools
 import operator
+import sys
+
+from funcs import get_predicted_fn, get_real_fn
 
 
-def main(predicted_fn, real_fn):
+def main():
     print("*** measuring success rate ***")
+
+    n = int(sys.argv[1])
+    predicted_fn = get_predicted_fn(n)
+    real_fn = get_real_fn(n)
+
     predicted = open(predicted_fn, "r").readlines()
     real = open(real_fn, "r").readlines()
     print(f"predicted results fn = {predicted_fn}")
@@ -15,3 +23,7 @@ def main(predicted_fn, real_fn):
     print(f"error = {len(eqs) - sum(eqs)}")
     success_rate = sum(eqs) / float(len(eqs))
     print(f"success rate = {success_rate}")
+
+
+if __name__ == "__main__":
+    main()
