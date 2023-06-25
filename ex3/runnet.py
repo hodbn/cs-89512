@@ -1,7 +1,8 @@
 import pickle
 
 import numpy as np
-from funcs import mse, mse_prime, tanh, tanh_prime
+from funcs import (get_predicted_fn, get_test_fn, get_wnet_fn, mse, mse_prime,
+                   tanh, tanh_prime)
 from network import ActivationLayer, FCLayer, Network
 from utils import concrete_predict
 
@@ -17,7 +18,10 @@ def read_testset(testset: list[str]):
     return list(map(np.array, zip(*map(load_entry, testset))))
 
 
-def main(network_fn, predicted_fn, test_fn):
+def main(n):
+    network_fn = get_wnet_fn(n)
+    predicted_fn = get_predicted_fn(n)
+    test_fn = get_test_fn(n)
     print("*** running network on test dataset ***")
     print(f"loading network from {network_fn}...")
     net = pickle.load(open(network_fn, "rb"))
