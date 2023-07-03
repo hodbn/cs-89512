@@ -61,9 +61,9 @@ def main(n):
 
     # network
     net = Network()
-    net.add(FCLayer(16, 50))
+    net.add(FCLayer(16, 16))
     net.add(ActivationLayer(tanh, tanh_prime))
-    net.add(FCLayer(50, 1))
+    net.add(FCLayer(16, 1))
     net.add(ActivationLayer(tanh, tanh_prime))
 
     print("network structure:")
