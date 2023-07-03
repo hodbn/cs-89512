@@ -78,6 +78,7 @@ class Network:
         return result
 
     def fit(self, x_train, y_train, epochs, learning_rate):
+        error_rates = []
         samples = len(x_train)
 
         for i in range(epochs):
@@ -94,7 +95,9 @@ class Network:
                     error = layer.backward_propagation(error, learning_rate)
 
             err /= samples
+            error_rates.append(err)
             print("epoch %d/%d   error=%f" % (i + 1, epochs, err))
+        return error_rates
 
     def __str__(self):
         return "inp " + "".join(map(str, self.layers)) + " -> out"

@@ -6,6 +6,20 @@ from funcs import (concrete_predict, get_dataset_fn, get_wnet_fn, mse,
 from network import ActivationLayer, FCLayer, Network
 
 
+def show_metrics(fn, error_rates):
+    try:
+        import matplotlib.pyplot as plt
+    except:
+        return
+    ypoints = np.array(error_rates)
+    plt.plot(ypoints, linestyle="dotted", label="error_rate")
+    plt.ylim([0, 1])
+    plt.xlabel("epochs")
+    plt.title(fn)
+    plt.legend()
+    plt.show()
+
+
 def open_dataset(fn):
     return open(fn, "r").readlines()
 
@@ -59,7 +73,7 @@ def main(n):
 
     # train
     net.use(mse, mse_prime)
-    net.fit(x_train, y_train, epochs=10, learning_rate=0.1)
+    error_rates = net.fit(x_train, y_train, epochs=10, learning_rate=0.1)
 
     print("testing...")
 
@@ -74,3 +88,5 @@ def main(n):
     # save network
     pickle.dump(net, open(output_fn, "wb"))
     print(f"network saved to {output_fn}")
+
+    show_metrics(dataset_fn, error_rates)
